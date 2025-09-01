@@ -16,7 +16,12 @@ public class StoryController {
 
     private final StoryService storyService;
 
-    @PostMapping("/create")
+    @GetMapping
+    public ResponseEntity<List<Story>> getAllStories() {
+        return ResponseEntity.ok(storyService.getAllStories());
+    }
+
+    @PostMapping
     public ResponseEntity<Story> create(@RequestBody Story story) {
         return ResponseEntity.ok(storyService.createStory(story));
     }

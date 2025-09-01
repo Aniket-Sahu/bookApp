@@ -43,4 +43,8 @@ public class StoryService {
         return storyRepository.findById(storyId)
                 .orElseThrow(() -> new RuntimeException("Story not found"));
     }
+
+    public List<Story> getAllStories() {
+        return storyRepository.findAll();
+    }
 }

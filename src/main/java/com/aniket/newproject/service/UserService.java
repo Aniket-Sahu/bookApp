@@ -24,20 +24,21 @@ public class UserService {
     private UserRepo repo;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public User saveUser(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        System.out.println(user.getPassword());
-        return repo.save(user) ;
-    }
+//    public User saveUser(User user) {
+//        user.setPassword(encoder.encode(user.getPassword()));
+//        System.out.println(user.getPassword());
+//        return repo.save(user) ;
+//    }
 
     public User register(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(user);
     }
 
     public User findByUsername(String username) {
-        return userRepository.findByUserName(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
 
