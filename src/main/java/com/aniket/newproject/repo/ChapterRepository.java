@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface ChapterRepository extends JpaRepository<Chapter, UUID> {
     List<Chapter> findByStory(Story story);
+    List<Chapter> findByStoryIdOrderByNumber(UUID storyId);
 }

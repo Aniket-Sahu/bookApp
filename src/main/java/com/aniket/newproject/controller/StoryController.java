@@ -1,6 +1,7 @@
 package com.aniket.newproject.controller;
 
 import com.aniket.newproject.model.Story;
+import com.aniket.newproject.model.Chapter;
 import com.aniket.newproject.service.StoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,22 @@ public class StoryController {
     @GetMapping("/genre/{genreName}")
     public ResponseEntity<List<Story>> getByGenre(@PathVariable String genreName) {
         return ResponseEntity.ok(storyService.getStoriesByGenre(genreName));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Story>> searchStories(@RequestParam String query) {
+        return ResponseEntity.ok(storyService.searchStories(query));
+    }
+
+    @PostMapping("/{storyId}/like")
+    public ResponseEntity<?> likeStory(@PathVariable UUID storyId, @RequestParam UUID userId) {
+        // Implementation for liking a story
+        return ResponseEntity.ok("Story liked");
+    }
+
+    @GetMapping("/{storyId}/chapters")
+    public ResponseEntity<List<Chapter>> getChapters(@PathVariable UUID storyId) {
+        return ResponseEntity.ok(storyService.getChaptersByStoryId(storyId));
     }
 
     @GetMapping("/user/{userId}")

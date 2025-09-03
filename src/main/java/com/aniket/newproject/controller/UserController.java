@@ -1,5 +1,6 @@
 package com.aniket.newproject.controller;
 
+import com.aniket.newproject.model.LoginRequest;
 import com.aniket.newproject.model.User;
 import com.aniket.newproject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,16 @@ public class UserController {
     public ResponseEntity<User> register(@RequestBody User user) {
         User createdUser = userService.register(user);
         return ResponseEntity.ok(createdUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            User user = userService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
     }
 
     @GetMapping("/{username}")

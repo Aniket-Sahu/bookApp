@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface StoryRepository extends JpaRepository<Story, UUID> {
     List<Story> findByGenre(Genre genre);
     List<Story> findByAuthor(User author);
+    List<Story> findByTitleContainingIgnoreCase(String title);
 }

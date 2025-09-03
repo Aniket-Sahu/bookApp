@@ -37,6 +37,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User authenticateUser(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (encoder.matches(password, user.getPassword())) {
+            return user;
+        } else {
+            throw new RuntimeException("Invalid password");
+        }
+    }
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
