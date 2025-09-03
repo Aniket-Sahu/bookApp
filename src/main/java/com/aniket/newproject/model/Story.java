@@ -34,5 +34,17 @@ public class Story {
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
     private List<Chapter> chapters;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
 }
 

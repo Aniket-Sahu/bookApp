@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface ChapterRepository extends JpaRepository<Chapter, UUID> {
     List<Chapter> findByStory(Story story);
     Optional<Chapter> findByStoryIdAndNumber(UUID storyId, int number);
+    List<Chapter> findByStoryIdOrderByNumber(UUID storyId);
 }

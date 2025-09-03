@@ -1,6 +1,7 @@
 package com.aniket.newproject.service;
 
 import com.aniket.newproject.model.UserPrincipal;
+import com.aniket.newproject.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,21 +9,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.aniket.newproject.model.User;
-import com.aniket.newproject.repo.UserRepo;
+
+import java.util.Optional;
 
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepo repo;
+    private UserRepository repo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = repo.findByUsername(username);
+        Optional<User> user = repo.findByUsername(username);
 
-        if (user == null) {
+        if (user.isEmpty()) {
             System.out.println("User 404");
             throw new UsernameNotFoundException("User 404");
         }

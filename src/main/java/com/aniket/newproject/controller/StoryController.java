@@ -2,6 +2,7 @@ package com.aniket.newproject.controller;
 
 import com.aniket.newproject.model.Story;
 import com.aniket.newproject.model.Chapter;
+import com.aniket.newproject.service.ChapterService;
 import com.aniket.newproject.service.StoryService;
 import com.aniket.newproject.service.NotificationService;
 import com.aniket.newproject.service.UserService;
@@ -20,6 +21,7 @@ public class StoryController {
     private final NotificationService notificationService;
     private final StoryService storyService;
     private final UserService userService;
+    private final ChapterService chapterService;
 
     @GetMapping
     public ResponseEntity<List<Story>> getAllStories() {
@@ -53,12 +55,6 @@ public class StoryController {
                 story.getTitle()
         );
         return ResponseEntity.ok("Story liked");
-    }
-
-
-    @GetMapping("/{storyId}/chapters")
-    public ResponseEntity<List<Chapter>> getChapters(@PathVariable UUID storyId) {
-        return ResponseEntity.ok(storyService.getChaptersByStoryId(storyId));
     }
 
     @GetMapping("/user/{userId}")

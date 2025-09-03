@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/users/login",
                                 "/stories",
                                 "/stories/search",
-                                "/genres"
+                                "/genres",
+                                "/users/*/notifications"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
