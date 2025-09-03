@@ -23,6 +23,11 @@ public class ChapterService {
         return chapterRepository.findByStory(story);
     }
 
+    public Chapter getChapterByNumber(UUID storyId, int chapterNumber) {
+        return chapterRepository.findByStoryIdAndNumber(storyId, chapterNumber)
+                .orElseThrow(() -> new RuntimeException("Chapter not found"));
+    }
+
     public Chapter getChapterById(UUID chapterId) {
         return chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new RuntimeException("Chapter not found"));

@@ -2,6 +2,8 @@ package com.aniket.newproject.controller;
 
 import com.aniket.newproject.model.LoginRequest;
 import com.aniket.newproject.model.User;
+import com.aniket.newproject.model.Read;
+import com.aniket.newproject.model.Story;
 import com.aniket.newproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +65,39 @@ public class UserController {
     @GetMapping("/{userId}/following")
     public ResponseEntity<List<User>> getFollowing(@PathVariable UUID userId) {
         return ResponseEntity.ok(userService.getFollowing(userId));
+    }
+
+    @GetMapping("/{userId}/reads")
+    public ResponseEntity<List<Read>> getUserReads(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.getUserReads(userId));
+    }
+
+    @PostMapping("/{userId}/reads")
+    public ResponseEntity<Read> addToReads(
+            @PathVariable UUID userId,
+            @RequestBody Read read) {
+        read.getId().setUserId(userId);
+        return ResponseEntity.ok(userService.addToReads(read));
+    }
+
+    @PutMapping("/{userId}/reads/{storyId}")
+    public ResponseEntity<Read> updateReadingProgress(
+            @PathVariable UUID userId,
+            @PathVariable UUID storyId,
+            @RequestBody Read read) {
+        return ResponseEntity.ok(userService.updateReadingProgress(userId, storyId, read));
+    }
+
+    @DeleteMapping("/{userId}/reads/{storyId}")
+    public ResponseEntity<?> removeFromReads(
+            @PathVariable UUID userId,
+            @PathVariable UUID storyId) {
+        userService.removeFromReads(userId, storyId);
+        return ResponseEntity.ok("Removed from reading list");
+    }
+
+    @GetMapping("/{userId}/likes")
+    public ResponseEntity<List<Story>> getUserLikedStories(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.getUserLikedStories(userId));
     }
 }

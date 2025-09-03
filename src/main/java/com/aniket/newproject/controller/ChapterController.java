@@ -28,5 +28,12 @@ public class ChapterController {
     ) {
         return ResponseEntity.ok(chapterService.getChapterById(chapterId));
     }
+
+    @GetMapping("/chapter/{chapterNumber}")
+    public ResponseEntity<Chapter> getChapterByNumber(
+            @PathVariable UUID storyId,
+            @PathVariable int chapterNumber) {
+        return ResponseEntity.ok(chapterService.getChapterByNumber(storyId, chapterNumber));
+    }
 }
 

@@ -5,9 +5,10 @@ import com.aniket.newproject.model.Story;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ChapterRepository extends JpaRepository<Chapter, UUID> {
     List<Chapter> findByStory(Story story);
-    List<Chapter> findByStoryIdOrderByNumber(UUID storyId);
+    Optional<Chapter> findByStoryIdAndNumber(UUID storyId, int number);
 }

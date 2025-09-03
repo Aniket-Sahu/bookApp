@@ -1,12 +1,9 @@
 package com.aniket.newproject.service;
 
 import com.aniket.newproject.model.*;
-import com.aniket.newproject.repo.FollowRepository;
-import com.aniket.newproject.repo.UserRepo;
-import com.aniket.newproject.repo.UserRepository;
+import com.aniket.newproject.repo.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +17,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    @Autowired
-    private UserRepo repo;
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final ReadRepository readRepository;
+    private final LikeRepository likeRepository;
 
-//    public User saveUser(User user) {
-//        user.setPassword(encoder.encode(user.getPassword()));
-//        System.out.println(user.getPassword());
-//        return repo.save(user) ;
-//    }
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public User register(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
@@ -51,6 +43,11 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
+    }
+
+    public User findById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userId));
     }
 
     @Transactional
@@ -88,6 +85,39 @@ public class UserService {
         return followRepository.findAllByIdFollowerId(userId)
                 .stream()
                 .map(Follow::getFollowing)
+                .collect(Collectors.toList());
+    }
+
+    public List<Read> getUserReads(UUID userId) {
+        return readRepository.findByIdUserId(userId);
+    }
+
+    public Read addToReads(Read read) {
+        return readRepository.save(read);
+    }
+
+    public Read updateReadingProgress(UUID userId, UUID storyId, Read updatedRead) {
+        ReadId readId = new ReadId(userId, storyId);
+        Read existingRead = readRepository.findById(readId)
+                .orElseThrow(() -> new RuntimeException("Reading record not found"));
+
+        existingRead.setStatus(updatedRead.getStatus());
+        existingRead.setCurrentChapter(updatedRead.getCurrentChapter());
+        existingRead.setProgress(updatedRead.getProgress());
+        existingRead.setLastReadAt(LocalDateTime.now());
+
+        return readRepository.save(existingRead);
+    }
+
+    public void removeFromReads(UUID userId, UUID storyId) {
+        ReadId readId = new ReadId(userId, storyId);
+        readRepository.deleteById(readId);
+    }
+
+    public List<Story> getUserLikedStories(UUID userId) {
+        return likeRepository.findByIdUserId(userId)
+                .stream()
+                .map(Like::getStory)
                 .collect(Collectors.toList());
     }
 }
